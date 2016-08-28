@@ -5,26 +5,31 @@ using System.Text.RegularExpressions;
 using UnityEngine.UI;
 using Restifizer;
 
+//Controller Class for Password retrieve scene
 public class PasswordForgotScreenController : MonoBehaviour
 {
-    private List<GameObject> m_TxtFields;
-    private List<GameObject> m_Buttons;
-    private GameObject m_InputMail;
+    private List<GameObject>    m_TxtFields;        //collection of text objects objects
+    private List<GameObject>    m_Buttons;          //collection of buttons on scene
+    private GameObject          m_InputMail;        //input object on scene for mail
 
-    private bool m_isClickAllowed;    //check if a clickEvent should be allowed
+    private bool                m_isClickAllowed;   //check if a clickEvent should be allowed
 
-    public RestifizerManager m_RestManager;
+    public RestifizerManager    m_RestManager;      //REST Manager for Communication with server
 
     // Use this for initialization
     void Start ()
     {
-        m_isClickAllowed = true;    //check if a clickEvent should be allowed
+        m_isClickAllowed    = true;    //check if a clickEvent should be allowed
 
-        m_InputMail = GameObject.Find("MailInput");
+        //set input object
+        m_InputMail         = GameObject.Find("MailInput");
+        //set local saved mail input from login page intp password forgot mail input
         m_InputMail.GetComponent<InputField>().text = PlayerPrefs.GetString("ForgotPWMail");
 
+        //delete local key
         PlayerPrefs.DeleteKey("ForgotPWMail");
 
+        //add buttons to collection
         m_Buttons = new List<GameObject>();
 
         m_Buttons.Add(GameObject.Find("CancelBtn"));
@@ -33,6 +38,7 @@ public class PasswordForgotScreenController : MonoBehaviour
 
         m_Buttons[2].SetActive(false);
 
+        //add text objects to collections and hide them
         m_TxtFields = new List<GameObject>();
 
         m_TxtFields.Add(GameObject.Find("MailErrorTxt"));
@@ -46,23 +52,25 @@ public class PasswordForgotScreenController : MonoBehaviour
 
     }
 
+    //from password forgot scene to login page
     public void ClickFromPWForgotToLogin()
     {
         Application.LoadLevel("LoginScreen");
     }
     
+    //send request for new password out after checking the fields
     public void ClickSendMailForNewPWBtn()
     {
 
         if (m_isClickAllowed)
         {
-            Debug.Log("ClickSendMailForNewPWBtn");
             SetBtnClick(false);
             string Mail = GameObject.Find("MailInput").GetComponent<InputField>().text;
 
+            //check if Email is ok
             bool isMailInputOk = Utilities.IsValidEmail(Mail);
-
-            Debug.Log(isMailInputOk);
+            
+            //error message shown if Mail was incorrect set
             SetTxtObject(0, !isMailInputOk);
            
             SetBtnClick(true);
@@ -80,32 +88,33 @@ public class PasswordForgotScreenController : MonoBehaviour
         }
 
     }
-
-
-   
-
-    public void SetTxtObject(int _id, bool _IsActive)
+    
+    //De-/Activate text object
+    public void SetTxtObject(int _ID, bool _IsActive)
     {
-        m_TxtFields[_id].SetActive(_IsActive);
+        m_TxtFields[_ID].SetActive(_IsActive);
     }
 
-
-    public void SetBtnObject(int _id, bool _IsActive)
+    //De-/Activate button object
+    public void SetBtnObject(int _ID, bool _IsActive)
     {
-        m_Buttons[_id].SetActive(_IsActive);
+        m_Buttons[_ID].SetActive(_IsActive);
     }
 
+    //De-/Activate button click events
     public void SetBtnClick(bool _IsActive)
     {
         m_isClickAllowed = _IsActive;
     }
 
+    //Mail/password failed to be send/saved shown
     public void SetMailFailed()
     {
        SetTxtObject(1, true);
        SetBtnClick(true);
     }
 
+    //Show information that server send mail out to user (Mail cant be changed)
     public void SetMailWasSendScreen()
     {
         SetTxtObject(1, false);
@@ -116,6 +125,7 @@ public class PasswordForgotScreenController : MonoBehaviour
         SetReadOnlyForInput();
     }
 
+    //change state of input object
     public void SetReadOnlyForInput()
     {
         m_InputMail.GetComponent<InputField>().readOnly =true;

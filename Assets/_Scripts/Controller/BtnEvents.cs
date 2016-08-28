@@ -6,44 +6,52 @@ using Restifizer;
 using System.Text.RegularExpressions;
 
 //Special Script for Button Events to Change Scenes
+//TODO: Check if this Class is not Obselete for future use
 
 public class BtnEvents : MonoBehaviour
 {
-    public float delay = 5; //set public to change the value fast in the scene during testing phase
+    public float m_Delay = 5; //set public to change the value fast in the scene during testing phase
 
     public RestifizerManager m_RestManager;
 
     private bool m_isClickAllowed;    //check if a clickEvent should be allowed
 
-    public List<GameObject> errorTxt;
+    public List<GameObject> m_ErrorTxt;   //Error Text Onjects in Scene 
 
+    //Init
     public void Start()
     {
-        SetBtnClick(true);
+        SetBtnClick(true);  //allow click events
     }
 
     
-
+    //Login Button Click events from Login to Menu
     public void ClickFromLoginToMenuBtn()
     {
         
         if (m_isClickAllowed)
         {
             SetBtnClick(false);
+            //Get inputs
             string PW = GameObject.Find("PWInput").GetComponent<InputField>().text;
             string Mail = GameObject.Find("NickInput").GetComponent<InputField>().text;
            
+            //check inputs
             bool isMailInputOk = Utilities.IsValidEmail(Mail);
             bool isPWInputOk = Utilities.IsValidPassword(PW);
             
+            //set error objects active
             SetErrorTxt(0, !isMailInputOk);
             SetErrorTxt(1, !isPWInputOk);
             SetBtnClick(true);
+
+            //check if inputs were ok
             if (isMailInputOk && isPWInputOk)
             {
                 SetBtnClick(false);
                 Debug.Log("Load Menu Page");
                 
+                //Call loginAPI to communicate with Server to login
                 GetComponent<LoginAPI>().Init();
                 GetComponent<LoginAPI>().GetLoginResult(m_RestManager, Mail, PW);
             }
@@ -52,22 +60,20 @@ public class BtnEvents : MonoBehaviour
         }
 
     }
-
     
-
-    
-
-    public void SetErrorTxt(int _id, bool _IsActive)
+    //De-/Activate Error Text Objects
+    public void SetErrorTxt(int _ID, bool _IsActive)
     {
-        errorTxt[_id].SetActive(_IsActive);
+        m_ErrorTxt[_ID].SetActive(_IsActive);
     }
 
-
+    //Go to Menu Scene without delay (the yield wont work since no StartCoroutine is set)
     public void LoadMenuScreen()
     {
-        LoadScene(delay, "MenuScreen");
+        LoadScene(m_Delay, "MenuScreen");
     }
 
+    //Go to Menu Screens after specific set delay
     public void ClickGoToMenuBtn()
     {
         
@@ -76,40 +82,43 @@ public class BtnEvents : MonoBehaviour
             Debug.Log("Load Menu Page");
             SetBtnClick(false);
 
-            StartCoroutine(LoadScene(delay, "MenuScreen"));
+            StartCoroutine(LoadScene(m_Delay, "MenuScreen"));
         }
        
     }
 
+    //Go to Register Screens after specific set delay
     public void ClickGoToRegisterBtn()
     {
         Debug.Log("Load Register Page");
         if (m_isClickAllowed)
         {
             SetBtnClick(false);
-            StartCoroutine(LoadScene(delay, "RegisterScreen"));
+            StartCoroutine(LoadScene(m_Delay, "RegisterScreen"));
         }
         
     }
 
+    //Go to Character Making Screens after specific set delay
     public void ClickGoToNewGameBtn()
     {
         Debug.Log("Load New Game Page");
         if (m_isClickAllowed)
         {
             SetBtnClick(false);
-            StartCoroutine(LoadScene(delay, "CharaMakingScreen"));
+            StartCoroutine(LoadScene(m_Delay, "CharaMakingScreen"));
         }
 
     }
 
+    //Go to Game Screens after specific set delay
     public void ClickGoToContinueBtn()
     {
         Debug.Log("Load Game Page");
         if (m_isClickAllowed)
         {
             SetBtnClick(false);
-            StartCoroutine(LoadScene(delay, "GameScreen"));
+            StartCoroutine(LoadScene(m_Delay, "GameScreen"));
         }
     }
 
@@ -120,6 +129,7 @@ public class BtnEvents : MonoBehaviour
         if (m_isClickAllowed)
         {
             SetBtnClick(false);
+            //Delete the local set variables of user for login
             if (PlayerPrefs.HasKey("UserMail"))
             {
                 PlayerPrefs.DeleteKey("UserEmail");
@@ -130,22 +140,26 @@ public class BtnEvents : MonoBehaviour
                 PlayerPrefs.DeleteKey("AutoUserPW");
             }
             
-            StartCoroutine(LoadScene(delay, "LoginScreen"));
+            StartCoroutine(LoadScene(m_Delay, "LoginScreen"));
         }
     }
 
+    //Go to Setting Screens after specific set delay
     public void ClickFromMenuToSettingsBtn()
     {
         Debug.Log("Load Option Page");
         Application.LoadLevel("SettingsScreen");
     }
 
+    //Go to Forgot PW Screens after specific set delay
     public void ClickFromLoginToPWForgot()
     {
         PlayerPrefs.SetString("ForgotPWMail", GameObject.Find("NickInput").GetComponent<InputField>().text);
         Application.LoadLevel("ForgotPassword");
     }
 
+    //Close APP
+    //TODO: close app completle as it is still running in BG on Mobile
     public void ClickExitBtn()
     {
         Debug.Log("Load Exit");
@@ -156,15 +170,17 @@ public class BtnEvents : MonoBehaviour
         }
     }
 
+    //de-/ activate click events
     public void SetBtnClick(bool _IsClickAllowed)
     {
         m_isClickAllowed = _IsClickAllowed;
     }
-    IEnumerator LoadScene(float delay, string scene)
+
+    //load specific scene after some delay
+    IEnumerator LoadScene(float _Delay, string _Scene)
     {
-        yield return new WaitForSeconds(delay);
-        Application.LoadLevel(scene);
+        yield return new WaitForSeconds(_Delay);
+        Application.LoadLevel(_Scene);
     }
-
-
+    
 }

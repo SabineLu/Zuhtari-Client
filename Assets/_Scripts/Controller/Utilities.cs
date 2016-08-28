@@ -5,13 +5,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
+//utili class for standard check ups and events which will be needed in all classes
 public static class Utilities
 {
-    public static bool CheckCharacterCount(string _Strng, int _MinLength)
+    //check length of the string, with given min length
+    public static bool CheckCharacterCount(string _String, int _MinLength)
     {
         bool lngSet;
         // Return true if strIn is in valid e-mail format.
-        if (_Strng.Length >= _MinLength)
+        if (_String.Length >= _MinLength)
         {
             lngSet = true;
         }
@@ -23,11 +25,12 @@ public static class Utilities
         return lngSet;
     }
 
-    public static bool IsValidPassword(string strIn)
+    //check if password is valid, min length (Add later check to make pw more secure) 
+    public static bool IsValidPassword(string _String)
     {
         bool pwSet;
         // Return true if strIn is in valid e-mail format.
-        if (strIn.Length > 6)
+        if (_String.Length > 6)
         {
             pwSet = true;
         }
@@ -39,16 +42,18 @@ public static class Utilities
         return pwSet;
     }
 
-    public static bool DoStringsMatch(String string1, String string2)
+    //check if two given strings match
+    public static bool DoStringsMatch(String _String1, String _String2)
     {
-        return String.Equals(string1,string2);
+        return String.Equals(_String1,_String2);
     }
 
-    public static bool IsValidEmail(string strIn)
+    //check if given mail is valid
+    public static bool IsValidEmail(string _String)
     {
-        bool check = Regex.IsMatch(strIn, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
+        bool check = Regex.IsMatch(_String, @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
         Debug.Log(check);
-        if (strIn.Length < 6)
+        if (_String.Length < 6)
         {
             check = false;
         }

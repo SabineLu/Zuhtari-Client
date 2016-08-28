@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SimpleJSON;
+﻿using SimpleJSON;
 using UnityEngine;
 using Assets._Scripts.Model;
-using System.Net.Mime;
-using static System.Net.Mime.MediaTypeNames;
+
+
+//Class has also included the testing of reading a JSON with SimpleJSON for Unity
+//Was first used as Class to create Pictures during runtime on Mobiles, but that function was put on Server instead
+
+//TODO: Call Server and Let a picture be created
 
 namespace Assets._Scripts.Controller
 {
@@ -30,46 +30,16 @@ namespace Assets._Scripts.Controller
             return targetFile.text;
         }
 
+        //Read the JSON Data File
         public void Test()
         {
-           var test = JSONNode.Parse(LoadResourceTextfile("PicturePlaceHolderLayer.json"));
+            var test = JSONNode.Parse(LoadResourceTextfile("PicturePlaceHolderLayer.json"));
             Debug.Log(test["Stage1"]);
             for (int i = 0; i < test["Stage1"][0].Count; i++)
             {
-                picModel.MakeStage1Model(1,i, test["Stage1"][0][i]);
+                picModel.MakeStage1Model(1, i, test["Stage1"][0][i]);
                 Debug.Log(test["Stage1"][0][i]);
             }
-            Debug.Log(test["Stage2"]);
-            Debug.Log(test["Stage3"]);
-            Debug.Log(test);
-        }
-
-        public System.Drawing.Bitmap MergeTwoImages(List<Image> _Images)
-        {
-            foreach (var item in _Images)
-            {
-                if (item == null)
-                {
-                    throw new ArgumentNullException("firstImage");
-                }
-            }
-
-
-            int outputImageWidth = _Images[0].Width;// > secondImage.Width ? firstImage.Width : secondImage.Width;
-
-            int outputImageHeight = firstImage.Height;// + secondImage.Height + 1;
-
-            Bitmap outputImage = new Bitmap(outputImageWidth, outputImageHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            using (Graphics graphics = Graphics.FromImage(outputImage))
-            {
-                graphics.DrawImage(firstImage, new Rectangle(new Point(), firstImage.Size),
-                    new Rectangle(new Point(), firstImage.Size), GraphicsUnit.Pixel);
-                graphics.DrawImage(secondImage, new Rectangle(new Point(0, firstImage.Height + 1), secondImage.Size),
-                    new Rectangle(new Point(), secondImage.Size), GraphicsUnit.Pixel);
-            }
-
-            return outputImage;
         }
     }
 }

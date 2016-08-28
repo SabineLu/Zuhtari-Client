@@ -1,15 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameManagerModel : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+//TODO: add data classes which will be handled by game manager (Player, monster etc.)
+public class GameManagerModel : MonoBehaviour
+{
 }

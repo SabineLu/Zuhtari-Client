@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+//class for the  picture creation layer data <LayerNumber,FileName>
+//TODO:Remove class since it became with new method from server side obselete
 namespace Assets._Scripts.Model
 {
     

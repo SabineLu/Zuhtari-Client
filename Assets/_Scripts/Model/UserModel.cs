@@ -3,10 +3,10 @@ using System.Collections;
 
 public class UserModel
 {
-    private string m_Email;
-    private string m_Name;
-    private string m_Password;
-    //private Date joinDate;
+    private string m_Email;         //email of the user
+    private string m_Name;          //name of the user
+    private string m_Password;      //password of the user
+    //private Date joinDate;        //join data is set by the server
 
     public UserModel()
     {
@@ -28,6 +28,8 @@ public class UserModel
         m_Name = _Name;
         m_Password = _PW;
     }
+
+    //Setter and Getter
 
     public string getEmail()
     {

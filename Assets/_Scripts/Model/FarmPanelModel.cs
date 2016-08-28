@@ -2,31 +2,39 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class FarmPanelModel {
+//Farm Panel Data Class
+public class FarmPanelModel
+{
 
-    private GameObject m_MainOverlay;
-    private List<GameObject> m_Overlays;
-    private List<GameObject> m_PlayerOverlays;
+    private GameObject          m_MainOverlay;      //Main overlay for farm panel
+    private List<GameObject>    m_Overlays;         //under overlays on top of main overlay
+    private List<GameObject>    m_PlayerOverlays;   //sepcific player overlays for player
 
-    private GameObject m_OpenOverlay;
-    private GameObject m_OpenPlayerOverlay;
+    private GameObject          m_OpenOverlay;      //opened overlay
+    private GameObject          m_OpenPlayerOverlay;//opened overlay of player info
+
     // Use this for initialization
     public void Init()
     {
-        m_Overlays = new List<GameObject>();
-        m_PlayerOverlays = new List<GameObject>();
-
-        m_MainOverlay = GameObject.Find("OverlayFarm");
+        m_Overlays          = new List<GameObject>();
+        m_PlayerOverlays    = new List<GameObject>();
 
 
+        //TODO: remove hardcoded object names
+        //assign Mainoverlay
+        m_MainOverlay       = GameObject.Find("OverlayFarm");
+
+        //assign overlays on top of main ovelray (monster info and player info)
         m_Overlays.Add(GameObject.Find("MonsterPanel").gameObject);
         m_Overlays.Add(m_MainOverlay.transform.Find("PlayerPanel").gameObject);
 
+        //assign player specific information overlays 
         m_PlayerOverlays.Add(GameObject.Find("FarmInfoPanel").gameObject);
         m_PlayerOverlays.Add(GameObject.Find("MarketInfoPanel").gameObject);
         m_PlayerOverlays.Add(GameObject.Find("MonsterBookInfoPanel").gameObject);
         m_PlayerOverlays.Add(GameObject.Find("GameStatisticInfoPanel").gameObject);
 
+        //set all overlays deactive
         for (int i = 0; i < m_Overlays.Count; i++)
         {
             m_Overlays[i].SetActive(false);
@@ -40,9 +48,11 @@ public class FarmPanelModel {
         m_MainOverlay.SetActive(false);
     }
 
-     public GameObject GetOverlay(string _name)
+    //get specific overlay with name
+     public GameObject GetOverlay(string _Name)
     {
-        GameObject panel = m_MainOverlay.transform.Find(_name).gameObject;
+        GameObject panel = m_MainOverlay.transform.Find(_Name).gameObject;
+
         if (m_Overlays.Contains(panel) == true)
         {
             if (m_OpenOverlay != null)
@@ -56,13 +66,14 @@ public class FarmPanelModel {
         return null;
     }
 
-    public GameObject GetPlayerLayer(string _name)
+    //get player layer with name of layer
+    public GameObject GetPlayerLayer(string _Name)
     {
         GameObject panel = null;
 
         for (int i = 0; i < m_PlayerOverlays.Count; i++)
         {
-            if (m_PlayerOverlays[i].name == _name)
+            if (m_PlayerOverlays[i].name == _Name)
             {
                 panel = m_PlayerOverlays[i];
                 break;
@@ -83,11 +94,14 @@ public class FarmPanelModel {
         return null;
     }
 
+
+    //Activate main overlay
     public void SetMainOverlayActive()
     {
         m_MainOverlay.SetActive(true);
     }
 
+    //set overlays deactive (hide them)
     public void SetOverlaysDeactive()
     {
         for (int i = 0; i < m_Overlays.Count; i++)
@@ -99,6 +113,7 @@ public class FarmPanelModel {
         m_OpenOverlay = null;
     }
 
+    //set player overlays deactive
     public void SetPlayerLaysDeactive()
     {
         for (int i = 0; i < m_PlayerOverlays.Count; i++)
