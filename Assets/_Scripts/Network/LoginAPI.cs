@@ -9,6 +9,9 @@ public class LoginAPI : MonoBehaviour
     private Hashtable           m_Parameters    = new Hashtable();      //Hashtable for parameters send tot he server
     private RestifizerResponse  m_Response      = null;                 //recived response from server
 
+    public void Init()
+    { }
+
     //send login data to server and await response
     public void GetLoginResult(RestifizerManager _Manager, string _Username, string _Password)
     {
@@ -62,25 +65,28 @@ public class LoginAPI : MonoBehaviour
         m_Parameters.Add("password", _User.getPassword());
 
         //send data
-        _Manager.ResourceAt("api/db/user/sendNewUser").Post(m_Parameters, (response) => {
+        _Manager.ResourceAt("api/db/user/addNewUser").Post(m_Parameters, (response) => {
             m_Response = response;
+            if (m_Response  != null)
+            {
+                if (m_Response.Status == 200)
+                {
+                    Application.LoadLevel("LoginScreen");
+                }
+                else if (m_Response.Status == 409)  //email was found already in db
+                {
 
+                    GetComponent<RegisterScreenController>().SetActiveExistTextObject(0, false);
+                    GetComponent<RegisterScreenController>().SetActiveExistTextObject(1, true);
+                }
+                else if (m_Response.Status == 408)   //name was already found in db
+                {
+                    GetComponent<RegisterScreenController>().SetActiveExistTextObject(0, true);
+                    GetComponent<RegisterScreenController>().SetActiveExistTextObject(1, false);
+                }
+            }
             //user was added
-            if (m_Response.Status == 200)
-            {
-                Application.LoadLevel("LoginScreen");
-            }
-            else if (m_Response.Status == 409)  //email was found already in db
-            {
-                
-                GetComponent<RegisterScreenController>().SetActiveExistTextObject(0, false);
-                GetComponent<RegisterScreenController>().SetActiveExistTextObject(1, true);
-            }
-            else if(m_Response.Status == 408)   //name was already found in db
-            {
-                GetComponent<RegisterScreenController>().SetActiveExistTextObject(0, true);
-                GetComponent<RegisterScreenController>().SetActiveExistTextObject(1,false);
-            }
+           
             //allow btn click
             GetComponent<RegisterScreenController>().SetBtnClick(true);
         });
