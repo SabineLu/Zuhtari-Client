@@ -1,0 +1,8 @@
+{"Stage1":[
+    {"Layer0":"S1B", "Layer1":"S1G2", "Layer2":"S1G3None", "Layer3":"S1EAN", "Layer4":"S1L"},
+    {"Layer0":"S1B", "Layer1":"S1G2", "Layer2":"S1G3Tiger", "Layer3":"S1EAN", "Layer4":"S1L"}],
+ "Stage2":[
+    {"Layer0":"S2B", "Layer1":"S2G2", "Layer2":"S2G3None", "Layer3":"S2EAN", "Layer4":"S2L"}],
+"Stage3":[
+    {"Layer0":"S3B", "Layer1":"S3G2", "Layer2":"S3G3None", "Layer3":"S3EAN", "Layer4":"S3L"}]
+}
